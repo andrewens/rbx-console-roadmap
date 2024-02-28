@@ -44,7 +44,7 @@
     "gameplay-test-runner": {
       "dependencies": ["build-console"],
       "display-name": "Create a Gameplay Test Runner Instance",
-      "blurb": "A gameplay test runner is a console instance that the user can show/hide by clicking on it or away, or via hotkey. Click to show/hide is a boolean property. Hotkey is a table property. Can also specify size, visible position, hidden position, anchor point, text size. Show a welcome message explaining the (also a property)."
+      "blurb": "A gameplay test runner is a console instance that the user can show/hide by clicking on it or away, or via hotkey. Click to show/hide is a boolean property. Hotkey is a table property. Can also specify size, visible position, hidden position, anchor point, text size. Show a welcome message the tests (also a property)."
     },
     "one-gameplay-test": {
       "dependencies": [
