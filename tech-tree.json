@@ -3,7 +3,8 @@
     "start": {
       "dependencies": [],
       "display-name": "Irresponsibly commit to refactoring the entire API",
-      "completed": "2-28-24"
+      "completed": "2-28-24",
+      "icon": "assets/refactor.png"
     },
     "build-console": {
       "dependencies": ["start"],
@@ -30,10 +31,64 @@
       "display-name": "Console Commands Can Change the Command Line Pointer",
       "blurb": "Rockraider400> could be changed to, for example, Rockraider400/test-#1>"
     },
+    "command-args": {
+      "dependencies": ["console-commands"],
+      "display-name": "Command Arguments",
+      "blurb": "Command objects can be configured (via method) to support command line args, specified by --argument-name or -alias. Arguments require a primitive type (default to boolean; others are string & number), and will typecast user input to that (with errors if input doesn't match). Arguments can be specified as required. Arguments can be looked up via the CLI table passed to command callback."
+    },
     "command-aliases": {
       "dependencies": ["console-commands"],
       "display-name": "Abbreviated Command Aliases",
-      "blurb": "Commands can be specified with additional aliases. If an alias has already been defined, throw an error. Aliases invoke the original command on the command line."
+      "blurb": "The console method to add a command returns a Command object. Commands can be specified with additional aliases as a method. If an alias has already been defined, throw an error. Aliases invoke the original command on the command line."
+    },
+    "gameplay-test-runner": {
+      "dependencies": ["build-console"],
+      "display-name": "Create a Gameplay Test Runner Instance",
+      "blurb": "A gameplay test runner is a console instance that the user can show/hide by clicking on it or away, or via hotkey. Click to show/hide is a boolean property. Hotkey is a table property. Can also specify size, visible position, hidden position, anchor point, text size. Show a welcome message explaining the (also a property)."
+    },
+    "one-gameplay-test": {
+      "dependencies": [
+        "gameplay-test-runner",
+        "command-output",
+        "command-ptr"
+      ],
+      "blurb": "TestRunner:BeginTests() begins the gameplay tests. A gameplay test is a modulescript returning a function returning a table of string questions. Tests run in the order they are added. Each question is asked, then the user responds with the command 'yes' or 'no'. The end of the test displays the # of passing/failing/total questions. User says 'next' to go to next test, and the command line ptr changes. A property specifies if a test auto-ends after a no.",
+      "display-name": "Add Gameplay Tests to Test Runners"
+    },
+    "many-gameplay-tests": {
+      "dependencies": ["one-gameplay-test"],
+      "display-name": "Batch-Add Folders of Gameplay Tests to Test Runners",
+      "blurb": "TestRunner:AddTests(...) specifies a folder of (folder of) gameplay tests, and also an optional table specifying the order they should run in. Test order adds onto the end of any previous tests added."
+    },
+    "skip-tests": {
+      "dependencies": ["one-gameplay-test", "command-args"],
+      "display-name": "Skip Gameplay Tests",
+      "blurb": "The 'back' command takes the user back to a previous test. 'next' can go forward as many times as possible. 'test X' takes you to the Xth test."
+    },
+    "test-summary": {
+      "dependencies": ["skip-tests"],
+      "display-name": "Test Summary",
+      "blurb": "The 'summary' command takes user to a list of all tests, showing each test's % completion and % passing, + the current test. 'back' command exits summary mode."
+    },
+    "test-command-aliases": {
+      "dependencies": ["test-summary", "command-aliases"],
+      "display-name": "Aliases for test runner commands",
+      "blurb": "s for summmary, b for back, ne for next, n for no, y for yes"
+    },
+    "specify-admins": {
+      "dependencies": ["start"],
+      "display-name": "Specify Admin Users on Server",
+      "blurb": "A method on server only allows adding a table of users as admins. Must be integers."
+    },
+    "multiplayer-testing": {
+      "dependencies": ["one-gameplay-test", "specify-admins"],
+      "display-name": "Multiplayer testing",
+      "blurb": "In multiplayer, one player (the first to join) is the commander, everyone else is a follower. Commanders use the test runner console normally. Followers only see the current question. Admins have a button allowing them to 'steal' and become the commander. If the commander leaves, the next admin or second player to join is commander."
+    },
+    "test-spawns": {
+      "dependencies": ["multiplayer-testing"],
+      "display-name": "Automatic Test Spawns",
+      "blurb": "A method on server allows adding spawn locations or folders of spawn locations, and the name of a gameplay test on the client. When the commander changes tests, all players spawn at that test's spawn location(s) (if there are any). Spawning respects teams."
     }
   }
 }
